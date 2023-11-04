@@ -13,10 +13,30 @@ import {CustomerRepository} from "@app/security/domain/persistence/CustomerRepos
 import {CustomerProfileRepository} from "@app/security/domain/persistence/CustomerProfileRepository";
 import {CustomerProfileRepositoryImpl} from "@app/security/infrastructure/repositories/CustomerProfileRepositoryImpl";
 import {JwtService} from "@nestjs/jwt";
+import {EmployeeRepository} from "@app/security/domain/persistence/EmployeeRepository";
+import {EmployeeRepositoryImpl} from "@app/security/infrastructure/repositories/EmployeeRepositoryImpl";
+import {EmployeeProfileRepository} from "@app/security/domain/persistence/EmployeeProfileRepository";
+import {EmployeeProfileRepositoryImpl} from "@app/security/infrastructure/repositories/EmployeeProfileRepositoryImpl";
+import {EmployeeMapper} from "@app/security/interfaces/rest/mapper/EmployeeMapper";
+import {EmployeeProfile} from "@app/security/domain/model/EmployeeProfile.entity";
+import {Employee} from "@app/security/domain/model/Employee.entity";
+import {TenantRepository} from "@app/security/domain/persistence/TenantRepository";
+import {TenantRepositoryImpl} from "@app/security/infrastructure/repositories/TenantRepositoryImpl";
+import {Tenant} from "@app/security/domain/model/Tenant.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Customer, CustomerProfile])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Customer,
+      CustomerProfile,
+      Employee,
+      EmployeeProfile,
+      Tenant
+    ])
+  ],
   providers: [
+    CustomerMapper,
+    EmployeeMapper,
     JwtService,
     {
       provide: CustomerProfileRepository,
@@ -26,7 +46,18 @@ import {JwtService} from "@nestjs/jwt";
       provide: CustomerRepository,
       useClass: CustomerRepositoryImpl
     },
-    CustomerMapper,
+    {
+      provide: EmployeeProfileRepository,
+      useClass: EmployeeProfileRepositoryImpl
+    },
+    {
+      provide: TenantRepository,
+      useClass: TenantRepositoryImpl
+    },
+    {
+      provide: EmployeeRepository,
+      useClass: EmployeeRepositoryImpl
+    },
     {
       provide: PasswordHashingService,
       useClass: PasswordHashingServiceImpl
