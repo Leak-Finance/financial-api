@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { SharedModule } from '@app/shared/shared.module';
+import {SecurityModule} from "@app/security/security.module";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SharedModule } from '@app/shared/shared.module';
       namingStrategy: new SnakeNamingStrategy(),
     }),
     SharedModule,
+    SecurityModule
   ],
   controllers: [AppController],
   providers: [AppService],
