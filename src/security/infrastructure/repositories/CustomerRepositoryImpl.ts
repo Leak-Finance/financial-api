@@ -15,6 +15,10 @@ export class CustomerRepositoryImpl implements CustomerRepository {
     return (await this.repository.findOneBy({ email: email })) !== null;
   }
 
+  findOneByEmail(email: string): Promise<Customer> {
+    return this.repository.findOneBy({ email: email });
+  }
+
   findOneById(id: number): Promise<Customer> {
     return this.repository.findOneBy({ id: id });
   }

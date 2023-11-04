@@ -12,10 +12,12 @@ import {CustomerRepositoryImpl} from "@app/security/infrastructure/repositories/
 import {CustomerRepository} from "@app/security/domain/persistence/CustomerRepository";
 import {CustomerProfileRepository} from "@app/security/domain/persistence/CustomerProfileRepository";
 import {CustomerProfileRepositoryImpl} from "@app/security/infrastructure/repositories/CustomerProfileRepositoryImpl";
+import {JwtService} from "@nestjs/jwt";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Customer, CustomerProfile])],
   providers: [
+    JwtService,
     {
       provide: CustomerProfileRepository,
       useClass: CustomerProfileRepositoryImpl

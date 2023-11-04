@@ -10,6 +10,8 @@ import {Customer} from "@app/security/domain/model/Customer.entity";
 import {CustomerProfile} from "@app/security/domain/model/CustomerProfile.entity";
 import {CustomerProfileRepository} from "@app/security/domain/persistence/CustomerProfileRepository";
 import {CustomerMapper} from "@app/security/interfaces/rest/mapper/CustomerMapper";
+import {AuthenticateCustomerResource} from "@app/security/interfaces/rest/resources/AuthenticateCustomerResource";
+import {JwtService} from "@nestjs/jwt";
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
@@ -17,11 +19,32 @@ export class AuthServiceImpl implements AuthService {
     @Inject(CustomerRepository) private readonly customerRepository: CustomerRepository,
     @Inject(CustomerProfileRepository) private readonly customerProfileRepository: CustomerProfileRepository,
     @Inject(PasswordHashingService) private readonly passwordHashingService: PasswordHashingService,
+    private readonly jwtService: JwtService,
     private readonly customerMapper: CustomerMapper,
   ) { }
 
-  customerLogin(request: AuthenticateCustomerRequest): Promise<AuthenticateCustomerResponse> {
-    return Promise.resolve(undefined);
+  async customerLogin(
+    { email, password }: AuthenticateCustomerRequest
+  ): Promise<AuthenticateCustomerResponse> {
+
+    const existingUserWithEmail = await this.customerRepository.findOneByEmail(email);
+
+    if (existingUserWithEmail == null ||
+      !(await this.passwordHashingService.compare(password, existingUserWithEmail.password))
+    ) {
+      return new AuthenticateCustomerResponse('Email or password is incorrect');
+    }
+
+    const resource = new AuthenticateCustomerResource();
+    resource.id = existingUserWithEmail.id;
+    resource.email = existingUserWithEmail.email;
+
+    resource.profile = await this.customerProfileRepository.findByCustomerId(resource.id);
+
+    const payload = { id: resource.id, username: resource.email };
+    resource.token = this.jwtService.sign(payload, { secret: "ABxña12Ñh!^,;!" });
+
+    return new AuthenticateCustomerResponse(resource);
   }
 
   async customerRegister(

@@ -14,4 +14,8 @@ export class CustomerProfileRepositoryImpl implements CustomerProfileRepository{
   persist(customerProfile: CustomerProfile): Promise<CustomerProfile> {
     return this.repository.save(customerProfile);
   }
+
+  findByCustomerId(id: number): Promise<CustomerProfile> {
+    return this.repository.findOneBy({ customerId: id });
+  }
 }

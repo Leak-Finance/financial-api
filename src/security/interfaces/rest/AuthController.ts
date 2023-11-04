@@ -1,9 +1,18 @@
 import {Public} from "@app/shared/infrastructure/decorator/public.decorator";
-import {ApiBadRequestResponse, ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {BadRequestException, Body, Controller, HttpStatus, Inject, Post} from "@nestjs/common";
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse
+} from "@nestjs/swagger";
+import {BadRequestException, Body, Controller, HttpStatus, Inject, Post, UnauthorizedException} from "@nestjs/common";
 import {AuthService} from "@app/security/domain/services/AuthService";
 import {RegisterCustomerRequest} from "@app/security/domain/services/communication/RegisterCustomerRequest";
 import {CustomerResource} from "@app/security/interfaces/rest/resources/CustomerResource";
+import {AuthenticateCustomerRequest} from "@app/security/domain/services/communication/AuthenticateCustomerRequest";
+import {AuthenticateCustomerResource} from "@app/security/interfaces/rest/resources/AuthenticateCustomerResource";
 
 @Public()
 @ApiTags('Auth')
@@ -32,28 +41,27 @@ export class AuthController {
     return result.resource;
   }
 
-  // @Post('sign-in')
-  // @ApiOperation({ summary: 'Login to an existing account and get JWT.' })
-  // @ApiBody({
-  //   type: AuthenticateRequest,
-  //   description: 'Data to authenticate an existing user',
-  // })
-  // @ApiUnauthorizedResponse({
-  //   description: 'Invalid credentials. Authentication failed.',
-  //   type: ApiExceptionResponse,
-  // })
-  // @ApiResponse({
-  //   status: HttpStatus.OK,
-  //   description: 'User authenticated successfully.',
-  //   type: AuthenticateDto,
-  // })
-  // async signIn(@Body() authenticateRequest: AuthenticateRequest) {
-  //   const result = await this.authService.login(authenticateRequest);
-  //
-  //   if (!result.success) {
-  //     throw new UnauthorizedException([result.message]);
-  //   }
-  //
-  //   return result.resource;
-  // }
+  @Post('customers/sign-in')
+  @ApiOperation({ summary: 'Login to an existing account and get JWT.' })
+  @ApiBody({
+    type: AuthenticateCustomerRequest,
+    description: 'Data to authenticate an existing user',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Invalid credentials. Authentication failed.',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User authenticated successfully.',
+    type: AuthenticateCustomerResource,
+  })
+  async signIn(@Body() authenticateRequest: AuthenticateCustomerRequest) {
+    const result = await this.authService.customerLogin(authenticateRequest);
+
+    if (!result.success) {
+      throw new UnauthorizedException([result.message]);
+    }
+
+    return result.resource;
+  }
 }
