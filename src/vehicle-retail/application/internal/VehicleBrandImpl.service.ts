@@ -13,12 +13,24 @@ export class VehicleBrandImplService implements VehicleBrandService {
     @Inject(VehicleBrandRepository) private readonly vehicleBrandRepository: VehicleBrandRepository
   ) { }
 
-  create(vehicleBrand: VehicleBrand): Promise<VehicleBrandResponse> {
-    return Promise.resolve(undefined);
+  async create(vehicleBrand: VehicleBrand): Promise<VehicleBrandResponse> {
+    if (await this.vehicleBrandRepository.existsByName(vehicleBrand.name)) {
+      return new VehicleBrandResponse("There's an existing vehicle brand with the same name.");
+    }
+
+    const model = await this.vehicleBrandRepository.persist(vehicleBrand);
+    return new VehicleBrandResponse(model);
   }
 
-  delete(id: number): Promise<VehicleBrandResponse> {
-    return Promise.resolve(undefined);
+  async delete(id: number): Promise<VehicleBrandResponse> {
+    const existingVehicleBrand = await this.vehicleBrandRepository.findById(id);
+
+    if (existingVehicleBrand == null) {
+      return new VehicleBrandResponse(`Vehicle brand with id ${id} not found.`);
+    }
+
+    await this.vehicleBrandRepository.remove(existingVehicleBrand);
+    return new VehicleBrandResponse(existingVehicleBrand);
   }
 
   async getAll(): Promise<Array<VehicleBrand>> {
@@ -35,9 +47,22 @@ export class VehicleBrandImplService implements VehicleBrandService {
     return new VehicleBrandResponse(existingVehicleBrand);
   }
 
-  update(id: number, updateVehicleBrandResource: UpdateVehicleBrandResource): Promise<VehicleBrandResponse> {
-    return Promise.resolve(undefined);
+  async update(id: number, updateVehicleBrandResource: UpdateVehicleBrandResource): Promise<VehicleBrandResponse> {
+    const existingVehicleBrand = await this.vehicleBrandRepository.findById(id);
+
+    if (existingVehicleBrand == null) {
+      return new VehicleBrandResponse(`Vehicle brand with id ${id} not found.`);
+    }
+
+    const existingVehicleBrandWithName = await this.vehicleBrandRepository.findByName(updateVehicleBrandResource.name);
+
+    if (existingVehicleBrandWithName !== null && existingVehicleBrandWithName.id !== id) {
+      return new VehicleBrandResponse(`There's an existing vehicle brand with the same name.`);
+    }
+
+    existingVehicleBrand.name = updateVehicleBrandResource.name;
+    await this.vehicleBrandRepository.persist(existingVehicleBrand);
+
+    return new VehicleBrandResponse(existingVehicleBrand);
   }
-
-
 }
