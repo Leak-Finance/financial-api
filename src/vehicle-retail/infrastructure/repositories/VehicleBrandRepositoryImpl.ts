@@ -18,11 +18,19 @@ export class VehicleBrandRepositoryImpl implements VehicleBrandRepository {
     return await this.repository.findOneBy({ id: id });
   }
 
+  async findByName(name: string): Promise<VehicleBrand | null> {
+    return await this.repository.findOneBy({ name: name });
+  }
+
   async persist(vehicleBrand: VehicleBrand): Promise<VehicleBrand> {
     return await this.repository.save(vehicleBrand);
   }
 
   async remove(vehicleBrand: VehicleBrand): Promise<void> {
     await this.repository.remove(vehicleBrand);
+  }
+
+  async existsByName(name: string): Promise<boolean> {
+    return (await this.repository.findOneBy({ name: name })) != null;
   }
 }
