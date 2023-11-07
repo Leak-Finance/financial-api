@@ -3,6 +3,8 @@ import { BadRequestException, Body, Controller, Get, HttpStatus, Inject, NotFoun
 import { CurrencyService } from "@app/vehicle-retail/domain/services/CurrencyService";
 import { CurrencyMapper } from "@app/vehicle-retail/interfaces/rest/mapper/CurrencyMapper";
 import { CurrencyResource } from "@app/vehicle-retail/interfaces/rest/resource/currency/CurrencyResource";
+import { CreateCurrencyResource } from "./resource/currency/CreateCurrencyResource";
+import { UpdateCurrencyResource } from "./resource/currency/UpdateVehicleBrandResource";
 
 @ApiBearerAuth()
 @ApiTags("Currencies")
@@ -56,8 +58,8 @@ export class CurrencyController {
   @ApiUnauthorizedResponse({
     description: "Unauthorized request.",
   })
-  async create(@Body() currency: CurrencyResource) {
-    const model = this.currencyMapper.toModel(currency);
+  async create(@Body() createCurrencyResource: CreateCurrencyResource) {
+    const model = this.currencyMapper.toModel(createCurrencyResource);
     const result = await this.currencyService.create(model);
     if (!result.success) {
       throw new BadRequestException([result.message]);
@@ -75,8 +77,8 @@ export class CurrencyController {
   @ApiUnauthorizedResponse({
     description: "Unauthorized request.",
   })
-  async update(@Param("id") id: number, @Body() currency: CurrencyResource) {
-    const result = await this.currencyService.update(id, currency);
+  async update(@Param("id") id: number, @Body() updateCurrencyResource: UpdateCurrencyResource) {
+    const result = await this.currencyService.update(id, updateCurrencyResource);
     if (!result.success) {
       throw new BadRequestException([result.message]);
     }
