@@ -3,6 +3,7 @@ import {VehicleBrand} from "@app/vehicle-retail/domain/model/VehicleBrand.entity
 import {
   CreateVehicleBrandResource
 } from "@app/vehicle-retail/interfaces/rest/resource/vehicleBrand/CreateVehicleResource";
+import { VehicleBrandResource } from "@app/vehicle-retail/interfaces/rest/resource/vehicleBrand/VehicleBrandResource";
 
 @Injectable()
 export class VehicleBrandMapper {
@@ -17,8 +18,8 @@ export class VehicleBrandMapper {
   toResource(vehicleBrand: VehicleBrand) {
     return {
       id: vehicleBrand.id,
-      name: vehicleBrand.name
-    } as VehicleBrand;
+      name: vehicleBrand.name,
+    } as VehicleBrandResource;
   }
 
   toResourceArray(models: Array<VehicleBrand>) {

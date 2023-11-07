@@ -5,8 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { SharedModule } from '@app/shared/shared.module';
-import {SecurityModule} from "@app/security/security.module";
-import {VehicleRetailModule} from "@app/vehicle-retail/vehicle-retail.module";
+import { SecurityModule } from '@app/security/security.module';
+import { VehicleRetailModule } from '@app/vehicle-retail/vehicle-retail.module';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import {VehicleRetailModule} from "@app/vehicle-retail/vehicle-retail.module";
     TypeOrmModule.forRoot({
       type: 'mysql',
       username: 'root',
-      password: 'password',
+      password: '1234',
       host: 'localhost',
       port: 3306,
       database: 'leak_finance',
@@ -25,7 +25,7 @@ import {VehicleRetailModule} from "@app/vehicle-retail/vehicle-retail.module";
     }),
     SharedModule,
     SecurityModule,
-    VehicleRetailModule
+    VehicleRetailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
