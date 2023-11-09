@@ -7,9 +7,7 @@ import { Inject, Injectable } from "@nestjs/common";
 
 @Injectable()
 export class CurrencyImplService implements CurrencyService {
-  constructor(
-    @Inject(CurrencyRepository) private readonly currencyRepository: CurrencyRepository
-  ) { }
+  constructor(@Inject(CurrencyRepository) private readonly currencyRepository: CurrencyRepository) {}
 
   async create(currency: Currency): Promise<CurrencyResponse> {
     if (await this.currencyRepository.existsByName(currency.name)) {
@@ -19,12 +17,12 @@ export class CurrencyImplService implements CurrencyService {
     const model = await this.currencyRepository.persist(currency);
     return new CurrencyResponse(model);
   }
-  async getAll(): Promise<Array<Currency>>{
+  async getAll(): Promise<Array<Currency>> {
     return await this.currencyRepository.findAll();
   }
   async getById(id: number): Promise<CurrencyResponse> {
     const existingCurrency = await this.currencyRepository.findById(id);
-    
+
     if (existingCurrency == null) {
       return new CurrencyResponse(`Currency with id ${id} not found.`);
     }
@@ -33,7 +31,7 @@ export class CurrencyImplService implements CurrencyService {
   }
   async delete(id: number): Promise<CurrencyResponse> {
     const existingCurrency = await this.currencyRepository.findById(id);
-    
+
     if (existingCurrency == null) {
       return new CurrencyResponse(`Currency with id ${id} not found.`);
     }
@@ -42,13 +40,13 @@ export class CurrencyImplService implements CurrencyService {
   }
   async update(id: number, updateCurrencyResource: UpdateCurrencyResource): Promise<CurrencyResponse> {
     const existingCurrency = await this.currencyRepository.findById(id);
-    
+
     if (existingCurrency == null) {
       return new CurrencyResponse(`Currency with id ${id} not found.`);
     }
 
     const existingCurrencyWithName = await this.currencyRepository.findByName(updateCurrencyResource.name);
-    
+
     if (existingCurrencyWithName !== null && existingCurrencyWithName.id !== id) {
       return new CurrencyResponse(`There's an existing currency with the same name.`);
     }
@@ -59,3 +57,4 @@ export class CurrencyImplService implements CurrencyService {
     return new CurrencyResponse(existingCurrency);
   }
 }
+
