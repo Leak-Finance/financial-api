@@ -9,4 +9,7 @@ export class UpdateVehicleResource {
 
   @ApiProperty()
   photoUrl: string;
+
+  @ApiProperty()
+  brandId: number;
 }

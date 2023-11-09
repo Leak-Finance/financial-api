@@ -14,10 +14,17 @@ import { CurrencyRepositoryImpl } from "./infrastructure/repositories/CurrencyRe
 import { CurrencyService } from "./domain/services/CurrencyService";
 import { CurrencyImplService } from "./application/internal/CurrencyImpl.service";
 import { CurrencyController } from "./interfaces/rest/Currency.controller";
+import {VehicleMapper} from "@app/vehicle-retail/interfaces/rest/mapper/VehicleMapper";
+import {VehicleRepository} from "@app/vehicle-retail/domain/persistence/VehicleRepository";
+import {VehicleRepositoryImpl} from "@app/vehicle-retail/infrastructure/repositories/VehicleRepositoryImpl";
+import {VehicleService} from "@app/vehicle-retail/domain/services/VehicleService";
+import {VehicleImplService} from "@app/vehicle-retail/application/internal/VehicleImpl.service";
+import {Vehicle} from "@app/vehicle-retail/domain/model/Vehicle.entity";
+import {VehicleController} from "@app/vehicle-retail/interfaces/rest/Vehicle.controller";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([VehicleBrand, Currency])
+    TypeOrmModule.forFeature([VehicleBrand, Currency, Vehicle])
   ],
   providers: [
     VehicleBrandMapper,
@@ -37,9 +44,18 @@ import { CurrencyController } from "./interfaces/rest/Currency.controller";
     {
       provide: CurrencyService,
       useClass: CurrencyImplService
+    },
+    VehicleMapper,
+    {
+      provide: VehicleRepository,
+        useClass: VehicleRepositoryImpl
+    },
+    {
+      provide: VehicleService,
+      useClass: VehicleImplService,
     }
   ],
-  controllers: [VehicleBrandsController, CurrencyController],
+  controllers: [VehicleBrandsController, CurrencyController, VehicleController],
   exports: [],
 })
 export class VehicleRetailModule { }

@@ -32,4 +32,9 @@ export class VehicleRepositoryImpl implements VehicleRepository {
   async remove(Vehicle: Vehicle): Promise<void> {
     await this.repository.remove(Vehicle);
   }
+
+  async existsByModel(model: string): Promise<boolean> {
+    const Vehicle = await this.repository.findOneBy({model: model});
+    return Vehicle !== null;
+  }
 }

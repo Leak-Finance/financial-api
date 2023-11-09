@@ -4,7 +4,7 @@ import { UpdateVehicleResource } from "@app/vehicle-retail/interfaces/rest/resou
 import { VehicleBrand } from "../model/VehicleBrand.entity";
 
 export interface VehicleService {
-  create(Vehicle: Vehicle): Promise<VehicleResponse>;
+  create(brandId: number, Vehicle: Vehicle): Promise<VehicleResponse>;
   getAll(): Promise<Array<Vehicle>>;
   getAllByBrand(brandId: number): Promise<Array<Vehicle>>;
   getById(id: number): Promise<VehicleResponse>;

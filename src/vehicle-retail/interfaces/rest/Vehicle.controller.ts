@@ -1,11 +1,21 @@
-import { VehicleService } from "@app/vehicle-retail/domain/services/VehicleService";
-import { BadRequestException, Body, Controller, Get, HttpStatus, Inject, Param, Post } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
-import { VehicleResource } from "./resource/vehicle/VehicleResource";
-import { VehicleBrand } from "@app/vehicle-retail/domain/model/VehicleBrand.entity";
-import { VehicleBrandService } from "@app/vehicle-retail/domain/services/VehicleBrandService";
-import { VehicleMapper } from "./mapper/VehicleMapper";
-import { CreateVehicleResource } from "./resource/vehicle/CreateVehicleResource";
+import {VehicleService} from "@app/vehicle-retail/domain/services/VehicleService";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from "@nestjs/common";
+import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse} from "@nestjs/swagger";
+import {VehicleResource} from "./resource/vehicle/VehicleResource";
+import {VehicleMapper} from "./mapper/VehicleMapper";
+import {CreateVehicleResource} from "./resource/vehicle/CreateVehicleResource";
+import { UpdateVehicleResource } from "@app/vehicle-retail/interfaces/rest/resource/vehicle/UpdateVehicleResource";
 
 @ApiBearerAuth()
 @ApiTags("vehicles")
@@ -21,8 +31,7 @@ export class VehicleController {
   @ApiResponse({ status: HttpStatus.OK, description: "Return all vehicles.", type: VehicleResource, isArray: true })
   @ApiUnauthorizedResponse({ description: "Unauthorized request." })
   async getAll(): Promise<VehicleResource[]> {
-    const vehicles = await this.vehicleService.getAll();
-    return vehicles;
+    return await this.vehicleService.getAll();
   }
 
   @Get(":id")
@@ -48,7 +57,35 @@ export class VehicleController {
   @ApiResponse({ status: HttpStatus.CREATED, description: "Return created vehicle.", type: VehicleResource })
   @ApiUnauthorizedResponse({ description: "Unauthorized request." })
   async create(@Param("brandId") brandId: number, @Body() createVehicleResource: CreateVehicleResource): Promise<VehicleResource> {
-    // TODO
-    return undefined;
+    const model = this.vehicleMapper.toModel(createVehicleResource);
+    const vehicle = await this.vehicleService.create(brandId, model);
+    if (!vehicle.success) {
+      throw new BadRequestException([vehicle.message]);
+    }
+    return this.vehicleMapper.toResource(vehicle.resource);
+  }
+
+  @Put(":id")
+  @ApiOperation({ summary: "Update vehicle" })
+  @ApiResponse({ status: HttpStatus.OK, description: "Return updated vehicle.", type: VehicleResource })
+  @ApiUnauthorizedResponse({ description: "Unauthorized request." })
+  async update(@Param("id") id: number, @Body() updateVehicleResource: UpdateVehicleResource): Promise<VehicleResource> {
+    const vehicle = await this.vehicleService.update(id, updateVehicleResource);
+    if (!vehicle.success) {
+      throw new BadRequestException([vehicle.message]);
+    }
+    return this.vehicleMapper.toResource(vehicle.resource);
+  }
+
+  @Delete(":id")
+  @ApiOperation({ summary: "Delete vehicle" })
+  @ApiResponse({ status: HttpStatus.OK, description: "Return deleted vehicle.", type: VehicleResource })
+  @ApiUnauthorizedResponse({ description: "Unauthorized request." })
+  async delete(@Param("id") id: number): Promise<VehicleResource> {
+    const vehicle = await this.vehicleService.delete(id);
+    if (!vehicle.success) {
+      throw new BadRequestException([vehicle.message]);
+    }
+    return this.vehicleMapper.toResource(vehicle.resource);
   }
 }
