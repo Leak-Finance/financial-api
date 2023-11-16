@@ -17,5 +17,8 @@ export class CustomerProfileResource {
   phoneNumber: string;
 
   @ApiProperty()
+  photoUrl: string;
+
+  @ApiProperty()
   customerId: number;
 }

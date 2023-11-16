@@ -64,7 +64,7 @@ export class AuthServiceImpl implements AuthService {
   }
 
   async customerRegister(
-    { firstName, lastName, email, dni, phoneNumber, password } : RegisterCustomerRequest
+    { firstName, lastName, email, dni, phoneNumber, password, photoUrl } : RegisterCustomerRequest
   ): Promise<RegisterCustomerResponse> {
 
     if (await this.customerRepository.existsByEmail(email)) {
@@ -86,6 +86,7 @@ export class AuthServiceImpl implements AuthService {
       linkedCustomerProfile.phoneNumber = phoneNumber;
       linkedCustomerProfile.firstName = firstName;
       linkedCustomerProfile.lastName = lastName;
+      linkedCustomerProfile.photoUrl = photoUrl;
       linkedCustomerProfile.customerId = savedCustomer.id;
 
       await this.customerProfileRepository.persist(linkedCustomerProfile);
@@ -119,6 +120,7 @@ export class AuthServiceImpl implements AuthService {
 
       defaultTenant.email = "leak-finance@mail.com";
       defaultTenant.phoneNumber = "+51 987 654 321";
+      defaultTenant.photoUrl = "https://marketplace.canva.com/EAFpJLtm2rU/1/0/1600w/canva-colorful-abstract-financial-investment-free-logo-sNx5L8kDRt0.jpg";
       defaultTenant.ruc = "10164121611";
       defaultTenant.name = "Leak Finance";
       defaultTenant.logoUrl = "https://marketplace.canva.com/EAFpJLtm2rU/1/0/1600w/canva-colorful-abstract-financial-investment-free-logo-sNx5L8kDRt0.jpg";
