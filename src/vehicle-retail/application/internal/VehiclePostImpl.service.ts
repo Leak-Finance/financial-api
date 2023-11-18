@@ -82,6 +82,7 @@ export class VehiclePostImplService implements VehiclePostService {
     if (updateVehiclePostResource.price <= 0) {
       return new VehiclePostResponse("Price must be greater than 0.");
     }
+    existingVehiclePost.description = updateVehiclePostResource.description;
     existingVehiclePost.vehicle = vehicle;
     existingVehiclePost.currency = currency;
     existingVehiclePost.price = updateVehiclePostResource.price;

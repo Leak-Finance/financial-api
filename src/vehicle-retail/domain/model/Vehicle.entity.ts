@@ -15,6 +15,6 @@ export class Vehicle {
   @Column()
   photoUrl: string;
 
-  @ManyToOne(() => VehicleBrand)
+  @ManyToOne(() => VehicleBrand, { eager: true })
   brand: VehicleBrand;
 }
