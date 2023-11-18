@@ -14,7 +14,7 @@ import { VehicleRetailModule } from '@app/vehicle-retail/vehicle-retail.module';
     TypeOrmModule.forRoot({
       type: 'mysql',
       username: 'root',
-      password: '1234',
+      password: 'root',
       host: 'localhost',
       port: 3306,
       database: 'leak_finance',

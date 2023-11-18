@@ -19,4 +19,7 @@ export class Tenant {
 
   @Column()
   phoneNumber: string;
+
+  @Column()
+  photoUrl: string;
 }

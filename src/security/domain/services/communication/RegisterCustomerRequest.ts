@@ -30,4 +30,8 @@ export class RegisterCustomerRequest {
   @ApiProperty()
   @IsNotEmpty()
   phoneNumber: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  photoUrl: string;
 }

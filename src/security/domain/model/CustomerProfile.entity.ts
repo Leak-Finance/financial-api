@@ -19,6 +19,9 @@ export class CustomerProfile {
   phoneNumber: string;
 
   @Column()
+  photoUrl: string;
+
+  @Column()
   @OneToOne(() => Customer, (customer) => customer.id)
   customerId: number;
 }

@@ -60,7 +60,7 @@ export class VehicleImplService implements VehicleService {
   }
 
   async update(id: number, updateVehicleResource: UpdateVehicleResource): Promise<VehicleResponse> {
-    console.log(id)
+    console.log(id);
     const existingVehicle = await this.vehicleRepository.findById(id);
 
     if (existingVehicle == null) {

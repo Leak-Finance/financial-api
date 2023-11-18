@@ -22,9 +22,9 @@ export class VehiclePost {
   @Column()
   createdByEmployeeProfileId: number;
 
-  @ManyToOne(() => Vehicle)
+  @ManyToOne(() => Vehicle, { eager: true })
   vehicle: Vehicle;
 
-  @ManyToOne(() => Currency)
+  @ManyToOne(() => Currency, { eager: true })
   currency: Currency;
 }
