@@ -10,4 +10,8 @@ export class BuyQueryRepository {
   async persist(buyQuery: BuyQuery) {
     return this.repository.save(buyQuery);
   }
+
+  async getAll() {
+    return this.repository.find();
+  }
 }

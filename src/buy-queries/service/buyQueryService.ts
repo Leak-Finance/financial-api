@@ -13,4 +13,8 @@ export class BuyQueryService {
       json: createBuyQueryDto.parameters,
     } as BuyQuery);
   }
+
+  async getAll() {
+    return await this.buyQueryRepository.getAll();
+  }
 }
