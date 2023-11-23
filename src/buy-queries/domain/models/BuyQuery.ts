@@ -10,4 +10,7 @@ export class BuyQuery {
 
   @Column({ type: "json" })
   json: any;
+
+  @Column({ default: () => "CURRENT_TIMESTAMP" })
+  createdAt: Date;
 }
