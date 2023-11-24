@@ -14,9 +14,9 @@ import {BuyQueryModule} from "@app/buy-queries/buy-query.module";
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: "mysql",
-      username: "root",
-      password: "password",
-      host: "localhost",
+      username: "leakfinance",
+      password: "finanzasgod@upc123",
+      host: "leakfinance.mysql.database.azure.com",
       port: 3306,
       database: "leak_finance",
       entities: [__dirname + "/**/*.entity{.ts,.js}"],
